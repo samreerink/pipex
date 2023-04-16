@@ -1,4 +1,4 @@
-#include	<stdio.h>
+#include	"pipex.h"
 
 size_t	find_path_env(char *str)
 {
@@ -15,13 +15,3 @@ size_t	find_path_env(char *str)
 	}
 	return (0);
 }
-/*
-size_t	pipex_strlen(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}*/
