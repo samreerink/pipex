@@ -1,30 +1,34 @@
-NAME= 		pipex.a
+NAME= 		pipex
 
-HEADER=		pipex.h
-
-RM= 		rm -f
+RM= 		rm -rf
 
 FLAGS= 		-Wall -Werror -Wextra
 
 SRCS= 		pipex.c find_path_env.c
 
-OBJECT= 	$(SRCS:.c=.o)
+OBJ= 	$(SRCS:.c=.o)
 
+LIBFT=		./libft/libft.a
 
 all:		$(NAME)
 
-$(NAME): 	$(OBJECT)
-			ar rcs $@ $^
+%.o:		%.c
+	$(CC) -c -o $@ $<
 
-%.o:		%.c $(HEADER)
-			$(CC) -c $(FLAGS) -o $@ $<
+$(LIBFT):
+	$(MAKE) -C ./libft
+
+$(NAME): 	$(LIBFT) $(OBJ)
+	$(CC) $(LIBFT) $(OBJ) -o $(NAME)
 
 clean:
-			$(RM) $(OBJECT)
+	$(RM) $(OBJ)
+	$(MAKE) -C ./libft clean
 
-fclean:		clean
-			$(RM) $(NAME)
+fclean:	clean
+	$(RM) $(NAME)
+	$(MAKE) -C ./libft fclean
 
-re:			fclean $(NAME)
+re:		fclean $(NAME)
 
 .PHONY:	all clean fclean re
