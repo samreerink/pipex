@@ -1,7 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   pipex.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/18 02:47:48 by sreerink      #+#    #+#                 */
+/*   Updated: 2023/04/18 02:47:51 by sreerink      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 #define PIPEX_H
 
+# include	<stdio.h>
+# include	<stdlib.h>
 # include	<unistd.h>
+# include	<sys/types.h>
+# include	<sys/wait.h>
+
 
 size_t	find_path_env(char *str);
 

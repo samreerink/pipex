@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    Makefile                                           :+:    :+:             #
+#                                                      +:+                     #
+#    By: sreerink <sreerink@student.codam.nl>         +#+                      #
+#                                                    +#+                       #
+#    Created: 2023/04/18 02:47:30 by sreerink      #+#    #+#                  #
+#    Updated: 2023/04/18 02:47:58 by sreerink      ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
 NAME= 		pipex
 
 RM= 		rm -rf
@@ -8,7 +20,7 @@ SRCS= 		pipex.c find_path_env.c
 
 OBJ= 	$(SRCS:.c=.o)
 
-LIBFT=		./libft/libft.a
+LIBFT=		./Libft/libft.a
 
 all:		$(NAME)
 
@@ -16,18 +28,18 @@ all:		$(NAME)
 	$(CC) -c -o $@ $<
 
 $(LIBFT):
-	$(MAKE) -C ./libft
+	$(MAKE) -C ./Libft
 
 $(NAME): 	$(LIBFT) $(OBJ)
 	$(CC) $(LIBFT) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)
-	$(MAKE) -C ./libft clean
+	$(MAKE) -C ./Libft clean
 
 fclean:	clean
 	$(RM) $(NAME)
-	$(MAKE) -C ./libft fclean
+	$(MAKE) -C ./Libft fclean
 
 re:		fclean $(NAME)
 

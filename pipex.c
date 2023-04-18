@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   pipex.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/04/18 02:47:42 by sreerink      #+#    #+#                 */
+/*   Updated: 2023/04/18 02:47:55 by sreerink      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include	"pipex.h"
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<unistd.h>
 
 char	*find_cmd_path(char *cmd, char *envp[])
 {
@@ -16,7 +25,7 @@ char	*find_cmd_path(char *cmd, char *envp[])
 		i++;
 	path_arr = ft_split(envp[i] + 5, ':');
 	i = 0;
-	while (access_check != 0 && path_arr[i] != '\0')
+	while (access_check != 0 && *path_arr[i] != '\0')
 	{
 		path_arr[i] = ft_strjoin_free(path_arr[i], cmd);
 		access_check = access(path_arr[i], F_OK);
@@ -41,10 +50,13 @@ int	main(int argc, char *argv[], char *envp[])
 	int	id;
 	int	pipefd[2];
 
-	if (pipe(pipefd) == -1)
-		return (-1);
+	id = 0;
 	if (argc > 2)
+	{
+		if (pipe(pipefd) == -1)
+			return (-1);
 		id = fork();
+	}
 	if (id == 0)
 	{
 		close(pipefd[0]);
