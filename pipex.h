@@ -16,11 +16,12 @@
 # include	<stdio.h>
 # include	<stdlib.h>
 # include	<unistd.h>
+# include	<fcntl.h>
 # include	<sys/types.h>
 # include	<sys/wait.h>
 
 
-size_t	find_path_env(char *str);
+size_t	find_path_env(char *str, char *to_find);
 
 char	**ft_split(char const *s, char c);
 

@@ -21,7 +21,7 @@ char	*find_cmd_path(char *cmd, char *envp[])
 	i = 0;
 	access_check = 1;
 	cmd = ft_strjoin("/", cmd);
-	while (!find_path_env(envp[i]))
+	while (!find_path_env(envp[i], "PATH="))
 		i++;
 	path_arr = ft_split(envp[i] + 5, ':');
 	i = 0;
@@ -35,7 +35,7 @@ char	*find_cmd_path(char *cmd, char *envp[])
 	return (path_arr[i]);
 }
 
-void	pipex_process(int *pipefd, char *cmd, char *envp[])
+void	pipex_process(char *cmd, char *envp[])
 {
 	char	*cmd_path;
 	char	**arg_arr;
@@ -48,25 +48,36 @@ void	pipex_process(int *pipefd, char *cmd, char *envp[])
 int	main(int argc, char *argv[], char *envp[])
 {
 	int	id;
+	int	file;
 	int	pipefd[2];
 
 	id = 0;
-	if (argc > 2)
-	{
-		if (pipe(pipefd) == -1)
-			return (-1);
-		id = fork();
-	}
+	if (argc != 5)
+		return (printf("Need 5 arguments\n"), -1);
+	if (pipe(pipefd) == -1)
+		return (-1);
+	id = fork();
 	if (id == 0)
 	{
 		close(pipefd[0]);
-		pipex_process(&pipefd[1], argv[1], envp);
+		file = open(argv[1], O_RDONLY);
+		if (file == -1)
+			return (printf("Could not open file in child process\n"), -1);
+		dup2(file, STDIN_FILENO);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		pipex_process(argv[2], envp);
 	}
 	else
 	{
 		close(pipefd[1]);
-		wait(NULL);
-		pipex_process(&pipefd[0], argv[2], envp);
+		file = open(argv[4], O_WRONLY | O_CREAT, 0777);
+		if (file == -1)
+			return (printf("Error when using open in parent process\n"), -1);
+		dup2(pipefd[0], STDIN_FILENO);
+		dup2(file, STDOUT_FILENO);
+		close(pipefd[1]);
+		pipex_process(argv[3], envp);
 	}
 	return (0);
 }
