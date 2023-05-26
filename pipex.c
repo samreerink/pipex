@@ -62,8 +62,9 @@ int	main(int argc, char *argv[], char *envp[])
 		close(pipefd[0]);
 		file = open(argv[1], O_RDONLY);
 		if (file == -1)
-			return (printf("Could not open file in child process\n"), -1);
+			return (perror(argv[1]), -1);
 		dup2(file, STDIN_FILENO);
+		close(file);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		pipex_process(argv[2], envp);
@@ -71,9 +72,9 @@ int	main(int argc, char *argv[], char *envp[])
 	else
 	{
 		close(pipefd[1]);
-		file = open(argv[4], O_WRONLY | O_CREAT, 0777);
+		file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC);
 		if (file == -1)
-			return (printf("Error when using open in parent process\n"), -1);
+			return (perror(argv[4]), -1);
 		dup2(pipefd[0], STDIN_FILENO);
 		dup2(file, STDOUT_FILENO);
 		close(pipefd[1]);
