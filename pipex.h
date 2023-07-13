@@ -20,6 +20,7 @@
 # include	<sys/types.h>
 # include	<sys/wait.h>
 
+void	error_exit(char *error_msg, int status);
 
 size_t	find_path_env(char *str, char *to_find);
 

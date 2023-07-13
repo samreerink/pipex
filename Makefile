@@ -16,7 +16,7 @@ RM= 		rm -rf
 
 FLAGS= 		-Wall -Werror -Wextra
 
-SRCS= 		pipex.c find_path_env.c
+SRCS= 		pipex.c pipex_utils.c
 
 OBJ= 	$(SRCS:.c=.o)
 
