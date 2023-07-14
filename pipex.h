@@ -22,7 +22,7 @@
 
 void	error_exit(char *error_msg, int status);
 
-size_t	find_path_env(char *str, char *to_find);
+size_t	search_str(char *str, char *to_find);
 
 char	**ft_split(char const *s, char c);
 

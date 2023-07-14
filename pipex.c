@@ -30,9 +30,15 @@ void	pipex_process(char *cmd, char *envp[])
 {
 	char	*cmd_path;
 	char	**arg_arr;
+	char	**path_arr;
 
 	arg_arr = ft_split(cmd, ' ');
-	cmd_path = find_cmd_path(arg_arr[0], envp);
+	if (!arg_arr)
+		error_exit("ft_split failed", 1);
+	path_arr = find_path_env(envp);
+	cmd_path = find_cmd_path(arg_arr[0], &path_arr, envp);
+	if (cmd_path = NULL)
+		cmd_path = arg_arr[0];
 	if (execve(cmd_path, arg_arr, envp) == -1)
 		error_exit(arg_arr[0], 1);
 }
