@@ -12,20 +12,19 @@
 
 #include	"pipex.h"
 
-void	error_exit(char *error_msg, int status, char *to_free[])
+void	error_exit(char *error_msg, int status, p_arr *arr)
 {
-	if (to_free)
-	{
-		//free array
-	}
+	if (arr->arg_arr)
+		free_array(&arr->arg_arr);
+	if (arr->path_arr)
+		free_array(&arr->path_arr);
 	perror(error_msg);
 	exit(status);
 }
 
-char	**find_path_env(char *envp[])
+void	find_path_env(p_arr *arr, char *envp[])
 {
 	size_t	i;
-	char	**path_arr;
 
 	i = 0;
 	while (!search_str(envp[i], "PATH="))
@@ -34,35 +33,43 @@ char	**find_path_env(char *envp[])
 		if (!envp[i])
 			return (NULL);
 	}
-	path_arr = ft_split(envp[i] + 5, ':');
+	arr->path_arr = ft_split(envp[i] + 5, ':');
 	if (!path_arr)
-		error_exit("ft_split failed", 1, NULL);
-	return (path_arr);
+		error_exit("ft_split failed", 1, &arr);
 }
 
-char	*check_local(char *cmd)
+char	*check_local(char *cmd, p_arr *arr)
 {
 	if (access(cmd, F_OK) == 0)
 		return (NULL);
-	error_exit(cmd, 127);
+	error_exit(cmd, 127, &arr);
 }
 
-char	*find_cmd_path(char *cmd, char *path_arr[], envp)
+char	*find_cmd_path(p_arr *arr)
 {
 	size_t	i;
 	int	access_check;
-	char	cmd_slash;
+	char	*cmd;
+	char	*cmd_path;
 
 	i = 0;
 	access_check = 1;
-	if (!path_arr)
+	if (!arr->path_arr)
+		return (check_local(arr->arg_arr[0], &arr));
+	cmd = ft_strjoin("/", arr->arg_arr[0]);
+	if (!cmd)
+		error_exit("ft_strjoin failed", 1, &arr);
+	while (access_check != 0 && arr->path_arr[i])
 	{
-		cmd = check_local(cmd);
-		return (cmd);
+		arr->path_arr[i] = ft_strjoin_free(arr->path_arr[i], cmd);
+		access_check = access(arr->path_arr[i], F_OK);
+		if (access_check == -1)
+			i++;
 	}
-	cmd_slash = ft_strjoin("/", cmd);
-	if (!cmd_slash)
-		error_exit("ft_strjoin failed", 1, &path_arr);
+	cmd_path = ft_strdup(arr->path_arr[i]);
+	free(cmd);
+	free_array(arr->path_arr);
+	return (cmd_path);
 }
 
 size_t	search_str(char *str, char *to_find)

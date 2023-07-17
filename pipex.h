@@ -20,7 +20,19 @@
 # include	<sys/types.h>
 # include	<sys/wait.h>
 
-void	error_exit(char *error_msg, int status);
+typedef struct pipex_arrays
+{
+	char	**arg_arr;
+	char	**path_arr;
+}	p_arr;
+
+void	error_exit(char *error_msg, int status, p_arr *arr);
+
+void	find_path_env(p_arr *arr, char *envp[]);
+
+char	*check_local(char *cmd, p_arr *arr);
+
+char	*find_cmd_path(p_arr *arr);
 
 size_t	search_str(char *str, char *to_find);
 
@@ -33,5 +45,7 @@ char	*ft_strjoin_free(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 
 char	*ft_strdup(const char *s1);
+
+void	free_array(char **arr);
 
 #endif
