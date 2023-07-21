@@ -12,17 +12,20 @@
 
 #include	"pipex.h"
 
-void	error_exit(char *error_msg, int status, p_arr *arr)
+void	error_exit(char *error_msg, int status, t_pipex *pipex)
 {
-	if (arr->arg_arr)
-		free_array(&arr->arg_arr);
-	if (arr->path_arr)
-		free_array(&arr->path_arr);
-	perror(error_msg);
+	if (pipex)
+	{
+		free_array(pipex->arg_arr);
+		free_array(pipex->path_arr);
+		free(pipex);
+	}
+	if (error_msg)
+		perror(error_msg);
 	exit(status);
 }
 
-void	find_path_env(p_arr *arr, char *envp[])
+void	find_path_env(t_pipex *pipex, char *envp[])
 {
 	size_t	i;
 
@@ -33,19 +36,19 @@ void	find_path_env(p_arr *arr, char *envp[])
 		if (!envp[i])
 			return (NULL);
 	}
-	arr->path_arr = ft_split(envp[i] + 5, ':');
+	pipex->path_arr = ft_split(envp[i] + 5, ':');
 	if (!path_arr)
-		error_exit("ft_split failed", 1, &arr);
+		error_exit("ft_split failed", 1, pipex);
 }
 
-char	*check_local(char *cmd, p_arr *arr)
+char	*check_local(char *cmd, t_pipex *pipex)
 {
 	if (access(cmd, F_OK) == 0)
 		return (NULL);
-	error_exit(cmd, 127, &arr);
+	error_exit(cmd, 127, pipex);
 }
 
-char	*find_cmd_path(p_arr *arr)
+char	*find_cmd_path(t_pipex *pipex)
 {
 	size_t	i;
 	int	access_check;
@@ -54,21 +57,21 @@ char	*find_cmd_path(p_arr *arr)
 
 	i = 0;
 	access_check = 1;
-	if (!arr->path_arr)
-		return (check_local(arr->arg_arr[0], &arr));
-	cmd = ft_strjoin("/", arr->arg_arr[0]);
+	if (!pipex->path_arr)
+		return (check_local(pipex->arg_arr[0], pipex));
+	cmd = ft_strjoin("/", pipex->arg_arr[0]);
 	if (!cmd)
-		error_exit("ft_strjoin failed", 1, &arr);
-	while (access_check != 0 && arr->path_arr[i])
+		error_exit("ft_strjoin failed", 1, pipex);
+	while (access_check != 0 && pipex->path_arr[i])
 	{
-		arr->path_arr[i] = ft_strjoin_free(arr->path_arr[i], cmd);
-		access_check = access(arr->path_arr[i], F_OK);
+		pipex->path_arr[i] = ft_strjoin_free(pipex->path_arr[i], cmd);
+		access_check = access(pipex->path_arr[i], F_OK);
 		if (access_check == -1)
 			i++;
 	}
-	cmd_path = ft_strdup(arr->path_arr[i]);
+	cmd_path = ft_strdup(pipex->path_arr[i]);
 	free(cmd);
-	free_array(arr->path_arr);
+	free_array(pipex->path_arr);
 	return (cmd_path);
 }
 

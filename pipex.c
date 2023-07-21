@@ -2,20 +2,24 @@
 
 void	pipex_process(char *cmd, char *envp[])
 {
-	p_arr	arr;
+	t_pipex	*pipex;
 	char	*cmd_path;
 
-	arr.arg_arr = ft_split(cmd, ' ');
-	if (!arr.arg_arr)
-		error_exit("ft_split failed", 1, NULL);
-	find_path_env(&arr, envp);
-	cmd_path = find_cmd_path(&arr);
+	pipex = ft_calloc(sizeof(t_pipex), 1);
+	if (!pipex)
+		error_exit("ft_calloc failed", 1, NULL);
+	pipex->path_arr = NULL;
+	pipex->arg_arr = ft_split(cmd, ' ');
+	if (!pipex->arg_arr)
+		error_exit("ft_split failed", 1, pipex);
+	find_path_env(pipex, envp);
+	cmd_path = find_cmd_path(pipex);
 	if (cmd_path == NULL)
-		cmd_path = arr.arg_arr[0];
-	if (execve(cmd_path, arr.arg_arr, envp) == -1)
+		cmd_path = pipex->arg_arr[0];
+	if (execve(cmd_path, pipex->arg_arr, envp) == -1)
 	{
 		free(cmd_path);
-		error_exit(arr.arg_arr[0], 1, &arr);
+		error_exit(pipex->arg_arr[0], 1, pipex);
 	}
 }
 
@@ -60,7 +64,10 @@ int	main(int argc, char *argv[], char *envp[])
 
 	id = 0;
 	if (argc != 5)
-		return (write(STDERR_FILENO, "Invalid amount of arguments, has to be 5\n", 41));
+	{
+		write(STDERR_FILENO, "Invalid amount of arguments\n", 28);
+		error_exit(NULL, 1, NULL);
+	}
 	if (pipe(pipefd) == -1)
 		error_exit("pipe", 1, NULL);
 	id = fork();
