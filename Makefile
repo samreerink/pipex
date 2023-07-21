@@ -16,7 +16,7 @@ RM= 		rm -rf
 
 FLAGS= 		-Wall -Werror -Wextra
 
-SRCS= 		pipex.c pipex_utils.c
+SRCS= 		pipex.c pipex_utils.c pipex_error.c
 
 OBJ= 	$(SRCS:.c=.o)
 

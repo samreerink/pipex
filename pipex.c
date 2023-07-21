@@ -3,24 +3,22 @@
 void	pipex_process(char *cmd, char *envp[])
 {
 	t_pipex	*pipex;
-	char	*cmd_path;
 
 	pipex = ft_calloc(sizeof(t_pipex), 1);
 	if (!pipex)
 		error_exit("ft_calloc failed", 1, NULL);
 	pipex->path_arr = NULL;
+	pipex->cmd_path = NULL;
 	pipex->arg_arr = ft_split(cmd, ' ');
 	if (!pipex->arg_arr)
 		error_exit("ft_split failed", 1, pipex);
 	find_path_env(pipex, envp);
-	cmd_path = find_cmd_path(pipex);
-	if (cmd_path == NULL)
-		cmd_path = pipex->arg_arr[0];
-	if (execve(cmd_path, pipex->arg_arr, envp) == -1)
-	{
-		free(cmd_path);
+	if (pipex->path_arr == NULL)
+		check_local(pipex);
+	if (pipex->path_arr != NULL)
+		find_cmd_path(pipex);
+	if (execve(pipex->cmd_path, pipex->arg_arr, envp) == -1)
 		error_exit(pipex->arg_arr[0], 1, pipex);
-	}
 }
 
 void	child_process(int pipefd[], char *argv[], char *envp[])

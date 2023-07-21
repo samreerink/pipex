@@ -24,15 +24,18 @@ typedef struct s_pipex
 {
 	char	**arg_arr;
 	char	**path_arr;
+	char	*cmd_path;
 }	t_pipex;
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex);
 
+void	free_array(char *array[]);
+
 void	find_path_env(t_pipex *pipex, char *envp[]);
 
-char	*check_local(char *cmd, t_pipex *pipex);
+void	check_local(t_pipex *pipex);
 
-char	*find_cmd_path(t_pipex *pipex);
+void	find_cmd_path(t_pipex *pipex);
 
 size_t	search_str(char *str, char *to_find);
 
@@ -45,7 +48,5 @@ char	*ft_strjoin_free(char *s1, char *s2);
 void	*ft_calloc(size_t count, size_t size);
 
 char	*ft_strdup(const char *s1);
-
-void	free_array(char *arr[]);
 
 #endif
