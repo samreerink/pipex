@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   pipex.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/07/21 21:21:12 by sreerink      #+#    #+#                 */
+/*   Updated: 2023/07/21 21:21:13 by sreerink      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include	"pipex.h"
 
 void	pipex_process(char *cmd, char *envp[])
@@ -17,8 +29,8 @@ void	pipex_process(char *cmd, char *envp[])
 		check_local(pipex);
 	if (pipex->path_arr != NULL)
 		find_cmd_path(pipex);
-	if (execve(pipex->cmd_path, pipex->arg_arr, envp) == -1)
-		error_exit(pipex->arg_arr[0], 1, pipex);
+	execve(pipex->cmd_path, pipex->arg_arr, envp);
+	error_exit(pipex->arg_arr[0], 1, pipex);
 }
 
 void	child_process(int pipefd[], char *argv[], char *envp[])
@@ -28,12 +40,12 @@ void	child_process(int pipefd[], char *argv[], char *envp[])
 	close(pipefd[0]);
 	file = open(argv[1], O_RDONLY);
 	if (file == -1)
-		error_exit("open in child process", 1, NULL);
+		error_exit(argv[1], 1, NULL);
 	if (dup2(file, STDIN_FILENO) == -1)
-		error_exit("dup2 in child process", 1, NULL);
+		error_exit("dup2 failed", 1, NULL);
 	close(file);
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-		error_exit("dup2 in child process", 1, NULL);
+		error_exit("dup2 failed", 1, NULL);
 	close(pipefd[1]);
 	pipex_process(argv[2], envp);
 }
@@ -45,12 +57,12 @@ void	parent_process(int pipefd[], char *argv[], char *envp[])
 	close(pipefd[1]);
 	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file == -1)
-		error_exit("open in parent process", 1, NULL);
+		error_exit(argv[4], 1, NULL);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
-		error_exit("dup2 in parent process", 1, NULL);
+		error_exit("dup2 failed", 1, NULL);
 	close(pipefd[0]);
 	if (dup2(file, STDOUT_FILENO) == -1)
-		error_exit("dup2 in parent process", 1, NULL);
+		error_exit("dup2 failed", 1, NULL);
 	close(file);
 	pipex_process(argv[3], envp);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   find_path_env.c                                    :+:    :+:            */
+/*   pipex_utils.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/04/18 02:47:12 by sreerink      #+#    #+#                 */
-/*   Updated: 2023/04/18 02:48:01 by sreerink      ########   odam.nl         */
+/*   Created: 2023/07/21 21:21:00 by sreerink      #+#    #+#                 */
+/*   Updated: 2023/07/21 21:21:01 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	check_local(t_pipex *pipex)
 void	find_cmd_path(t_pipex *pipex)
 {
 	size_t	i;
-	int	access_check;
+	int		access_check;
 	char	*cmd;
 
 	i = 0;
