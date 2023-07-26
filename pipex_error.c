@@ -31,7 +31,7 @@ void	free_array(char *array[])
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex)
 {
-	if (pipex->id != 0 && pipex != NULL)
+	if (pipex != NULL && pipex->id != 0)
 		wait(NULL);
 	if (status == 127)
 	{
