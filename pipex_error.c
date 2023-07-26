@@ -31,6 +31,8 @@ void	free_array(char *array[])
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex)
 {
+	if (pipex->id != 0 && pipex != NULL)
+		wait(NULL);
 	if (status == 127)
 	{
 		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
