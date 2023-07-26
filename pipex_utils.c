@@ -17,6 +17,8 @@ void	find_path_env(t_pipex *pipex, char *envp[])
 	size_t	i;
 
 	i = 0;
+	if (pipex->arg_arr[0] == '\0')
+		error_exit(" ", 127, pipex);
 	if (!envp)
 		return ;
 	while (!search_str(envp[i], "PATH="))
@@ -34,6 +36,8 @@ void	check_local(t_pipex *pipex)
 {
 	if (access(pipex->arg_arr[0], F_OK) == 0)
 	{
+		if (access(pipex->arg_arr[0], X_OK) != 0)
+			error_exit(pipex->arg_arr[0], 126, pipex);
 		pipex->cmd_path = pipex->arg_arr[0];
 		return ;
 	}
@@ -64,6 +68,7 @@ void	find_cmd_path(t_pipex *pipex)
 	else
 		check_local(pipex);
 	free_array(pipex->path_arr);
+	pipex->path_arr = NULL;
 }
 
 size_t	search_str(char *str, char *to_find)

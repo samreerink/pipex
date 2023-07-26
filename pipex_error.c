@@ -17,6 +17,8 @@ void	free_array(char *array[])
 	size_t	i;
 
 	i = 0;
+	if (!array)
+		return ;
 	while (array[i])
 	{
 		free(array[i]);
@@ -29,17 +31,20 @@ void	free_array(char *array[])
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex)
 {
-	extern int	errno;
-
-	if (errno == EACCES)
-		status = 126;
+	if (status == 127)
+	{
+		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
+		write(STDERR_FILENO, ": command not found\n", 20);
+		error_msg = NULL;
+	}
 	if (error_msg)
 		perror(error_msg);
 	if (pipex)
 	{
 		free_array(pipex->arg_arr);
-		if (pipex->path_arr)
-			free_array(pipex->path_arr);
+		pipex->arg_arr = NULL;
+		free_array(pipex->path_arr);
+		pipex->path_arr = NULL;
 		free(pipex->cmd_path);
 		free(pipex);
 	}
