@@ -23,7 +23,7 @@
 
 typedef struct s_pipex
 {
-	int	id;
+	int		id;
 	char	**arg_arr;
 	char	**path_arr;
 	char	*cmd_path;

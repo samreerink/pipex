@@ -63,7 +63,7 @@ void	parent_process(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipex	*pipex;
-	int	pipefd[2];
+	int		pipefd[2];
 
 	if (argc != 5)
 	{
