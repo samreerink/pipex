@@ -12,12 +12,12 @@
 
 #include	"pipex.h"
 
-void	free_array(char *array[])
+void	free_array(char **array)
 {
 	size_t	i;
 
 	i = 0;
-	if (!array)
+	if (!array[i])
 		return ;
 	while (array[i])
 	{

@@ -13,6 +13,7 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# include	"Libft/libft.h"
 # include	<stdio.h>
 # include	<stdlib.h>
 # include	<unistd.h>
@@ -31,7 +32,7 @@ typedef struct s_pipex
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex);
 
-void	free_array(char *array[]);
+void	free_array(char **array);
 
 void	find_path_env(t_pipex *pipex, char *envp[]);
 
@@ -40,17 +41,5 @@ void	check_local(t_pipex *pipex);
 void	find_cmd_path(t_pipex *pipex);
 
 size_t	search_str(char *str, char *to_find);
-
-char	**ft_split(char const *s, char c);
-
-char	*ft_strjoin(char const *s1, char const *s2);
-
-char	*ft_strjoin_free(char *s1, char *s2);
-
-void	*ft_calloc(size_t count, size_t size);
-
-char	*ft_strdup(const char *s1);
-
-size_t	ft_strlen(const char *s);
 
 #endif
