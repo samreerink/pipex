@@ -17,7 +17,7 @@ void	free_array(char **array)
 	size_t	i;
 
 	i = 0;
-	if (!array[i])
+	if (!array)
 		return ;
 	while (array[i])
 	{
@@ -37,16 +37,13 @@ void	error_exit(char *error_msg, int status, t_pipex *pipex)
 	{
 		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 		write(STDERR_FILENO, ": command not found\n", 20);
-		error_msg = NULL;
 	}
-	if (error_msg)
+	else
 		perror(error_msg);
 	if (pipex)
 	{
 		free_array(pipex->arg_arr);
-		pipex->arg_arr = NULL;
 		free_array(pipex->path_arr);
-		pipex->path_arr = NULL;
 		free(pipex->cmd_path);
 		free(pipex);
 	}

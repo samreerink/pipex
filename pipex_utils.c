@@ -38,7 +38,7 @@ void	check_local(t_pipex *pipex)
 	{
 		if (access(pipex->arg_arr[0], X_OK) != 0)
 			error_exit(pipex->arg_arr[0], 126, pipex);
-		pipex->cmd_path = pipex->arg_arr[0];
+		pipex->cmd_path = ft_strdup(pipex->arg_arr[0]);
 		return ;
 	}
 	error_exit(pipex->arg_arr[0], 127, pipex);
