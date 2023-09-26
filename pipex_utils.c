@@ -17,7 +17,7 @@ void	find_path_env(t_pipex *pipex, char *envp[])
 	size_t	i;
 
 	i = 0;
-	if (pipex->arg_arr[0] == '\0')
+	if (!pipex->arg_arr[0])
 		error_exit(" ", 127, pipex);
 	if (!envp)
 		return ;

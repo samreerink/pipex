@@ -31,7 +31,7 @@ $(LIBFT):
 	$(MAKE) -C ./Libft
 
 $(NAME): 	$(LIBFT) $(OBJ)
-	$(CC) $(LIBFT) $(OBJ) -o $(NAME)
+	$(CC) $(OBJ) -L./Libft -lft -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)

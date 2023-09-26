@@ -38,7 +38,7 @@ void	error_exit(char *error_msg, int status, t_pipex *pipex)
 		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 		write(STDERR_FILENO, ": command not found\n", 20);
 	}
-	else
+	else if (error_msg != NULL)
 		perror(error_msg);
 	if (pipex)
 	{
