@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include	"pipex.h"
+#include "pipex.h"
 
 void	pipex_process(char *cmd, char *envp[], t_pipex *pipex)
 {

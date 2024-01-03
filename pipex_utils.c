@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include	"pipex.h"
+#include "pipex.h"
 
 void	find_path_env(t_pipex *pipex, char *envp[])
 {
