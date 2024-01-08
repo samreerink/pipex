@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipex_utils.c                                      :+:    :+:            */
+/*   pipex_utils.c                                     :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/07/21 21:21:00 by sreerink      #+#    #+#                 */
-/*   Updated: 2023/07/21 21:21:01 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/08 21:07:44 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	init_pipex(t_pipex *pipex)
+{
+	pipex = ft_calloc(sizeof(t_pipex), 1);
+	if (!pipex)
+		error_exit("ft_calloc", EXIT_FAILURE, NULL);
+	pipex->arg_arr = NULL;
+	pipex->path_arr = NULL;
+	pipex->cmd_path = NULL;
+}
 
 void	find_path_env(t_pipex *pipex, char *envp[])
 {
@@ -29,7 +39,7 @@ void	find_path_env(t_pipex *pipex, char *envp[])
 	}
 	pipex->path_arr = ft_split(envp[i] + 5, ':');
 	if (!pipex->path_arr)
-		error_exit("ft_split failed", 1, pipex);
+		error_exit("ft_split", EXIT_FAILURE, pipex);
 }
 
 void	check_local(t_pipex *pipex)
@@ -54,7 +64,7 @@ void	find_cmd_path(t_pipex *pipex)
 	access_check = 1;
 	cmd = ft_strjoin("/", pipex->arg_arr[0]);
 	if (!cmd)
-		error_exit("ft_strjoin failed", 1, pipex);
+		error_exit("ft_strjoin", EXIT_FAILURE, pipex);
 	while (access_check != 0 && pipex->path_arr[i])
 	{
 		pipex->path_arr[i] = ft_strjoin_free(pipex->path_arr[i], cmd);

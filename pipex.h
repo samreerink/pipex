@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   pipex.h                                            :+:    :+:            */
+/*   pipex.h                                           :+:    :+:             */
 /*                                                     +:+                    */
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/18 02:47:48 by sreerink      #+#    #+#                 */
-/*   Updated: 2023/04/18 02:47:51 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/08 21:10:50 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@
 
 typedef struct s_pipex
 {
-	int		id;
+	pid_t	id;
 	char	**arg_arr;
 	char	**path_arr;
 	char	*cmd_path;
 }	t_pipex;
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex);
+
+void	init_pipex(t_pipex *pipex);
 
 void	free_array(char **array);
 
