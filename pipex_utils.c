@@ -6,21 +6,11 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/07/21 21:21:00 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/01/08 21:07:44 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/09 15:34:36 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	init_pipex(t_pipex *pipex)
-{
-	pipex = ft_calloc(sizeof(t_pipex), 1);
-	if (!pipex)
-		error_exit("ft_calloc", EXIT_FAILURE, NULL);
-	pipex->arg_arr = NULL;
-	pipex->path_arr = NULL;
-	pipex->cmd_path = NULL;
-}
 
 void	find_path_env(t_pipex *pipex, char *envp[])
 {

@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/07/21 21:21:12 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/01/08 21:12:15 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/09 20:47:17 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	pipex_process(char *cmd, char *envp[], t_pipex *pipex)
 	error_exit(pipex->arg_arr[0], EXIT_FAILURE, pipex);
 }
 
-void	child_process(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
+void	first_child(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
 {
 	int	file;
 
@@ -43,7 +43,7 @@ void	child_process(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
 	pipex_process(argv[2], envp, pipex);
 }
 
-void	parent_process(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
+void	second_child(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
 {
 	int	file;
 
@@ -60,25 +60,45 @@ void	parent_process(int pipefd[], char *argv[], char *envp[], t_pipex *pipex)
 	pipex_process(argv[3], envp, pipex);
 }
 
+void	pre_pipex_process(char *argv[], char *envp[], t_pipex *pipex)
+{
+	int	pipefd[2];
+
+	if (pipe(pipefd) == -1)
+		error_exit("pipe", EXIT_FAILURE, pipex);
+	pipex->pid1 = fork();
+	if (pipex->pid1 == -1)
+		error_exit("fork", EXIT_FAILURE, pipex);
+	if (pipex->pid1 == 0)
+		first_child(pipefd, argv, envp, pipex);
+	pipex->pid2 = fork();
+	if (pipex->pid2 == -1)
+		error_exit("fork", EXIT_FAILURE, pipex);
+	if (pipex->pid2 == 0)
+		second_child(pipefd, argv, envp, pipex);
+	close(pipefd[0]);
+	close(pipefd[1]);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pipex	*pipex;
-	int		pipefd[2];
+	int		status;
 
 	if (argc != 5)
 	{
 		write(STDERR_FILENO, "Invalid amount of arguments\n", 28);
 		error_exit(NULL, EXIT_FAILURE, NULL);
 	}
-	init_pipex(pipex);
-	if (pipe(pipefd) == -1)
-		error_exit("pipe", EXIT_FAILURE, pipex);
-	pipex->id = fork();
-	if (pipex->id == -1)
-		error_exit("fork", EXIT_FAILURE, pipex);
-	if (pipex->id == 0)
-		child_process(pipefd, argv, envp, pipex);
-	else
-		parent_process(pipefd, argv, envp, pipex);
-	return (0);
+	pipex = ft_calloc(sizeof(t_pipex), 1);
+	if (!pipex)
+		error_exit("ft_calloc", EXIT_FAILURE, NULL);
+	pipex->arg_arr = NULL;
+	pipex->path_arr = NULL;
+	pipex->cmd_path = NULL;
+	pre_pipex_process(argv, envp, pipex);
+	waitpid(pipex->pid1, NULL, 0);
+	waitpid(pipex->pid2, &status, 0);
+	free_pipex(pipex);
+	return (WEXITSTATUS(status));
 }

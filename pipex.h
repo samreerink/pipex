@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/04/18 02:47:48 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/01/08 21:10:50 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/09 18:26:51 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 
 typedef struct s_pipex
 {
-	pid_t	id;
+	pid_t	pid1;
+	pid_t	pid2;
 	char	**arg_arr;
 	char	**path_arr;
 	char	*cmd_path;
@@ -32,7 +33,7 @@ typedef struct s_pipex
 
 void	error_exit(char *error_msg, int status, t_pipex *pipex);
 
-void	init_pipex(t_pipex *pipex);
+void	free_pipex(t_pipex *pipex);
 
 void	free_array(char **array);
 
