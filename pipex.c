@@ -6,7 +6,7 @@
 /*   By: sreerink <sreerink@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/07/21 21:21:12 by sreerink      #+#    #+#                 */
-/*   Updated: 2024/01/09 20:47:17 by sreerink      ########   odam.nl         */
+/*   Updated: 2024/01/10 13:11:45 by sreerink      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,10 @@ int	main(int argc, char *argv[], char *envp[])
 	pipex->path_arr = NULL;
 	pipex->cmd_path = NULL;
 	pre_pipex_process(argv, envp, pipex);
-	waitpid(pipex->pid1, NULL, 0);
-	waitpid(pipex->pid2, &status, 0);
+	if (waitpid(pipex->pid1, NULL, 0) == -1)
+		error_exit("waitpid", EXIT_FAILURE, pipex);
+	if (waitpid(pipex->pid2, &status, 0) == -1)
+		error_exit("waitpid", EXIT_FAILURE, pipex);
 	free_pipex(pipex);
 	return (WEXITSTATUS(status));
 }
